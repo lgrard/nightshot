@@ -8,19 +8,35 @@ using static UnityEngine.InputSystem.InputAction;
 public class PlayerController : MonoBehaviour
 {
     [Header("Values")]
-    [SerializeField] float movementSpeed = 10;
+    [SerializeField] float runningSpeed = 10;
+    [SerializeField] float attackingSpeed = 5;
+    [SerializeField] float takingDamageSpeed = 5;
     [SerializeField] float groundCheckDistance = 5;
     [SerializeField] float rotationSmoothingAmount = 0.01f;
+    [SerializeField] float attackStampMax = 1f;
+    private float currentStamp = 0f;
 
     private Vector2 inputMovement;
     private Vector2 inputRot;
+
 
     [Header("Components")]
     [SerializeField] MeshRenderer mesh;
     private Rigidbody rb;
 
     [Header("Object reference")]
-    [SerializeField] Gamemanager gameManager;
+    [SerializeField] GameManager gameManager;
+
+    [Header("States")]
+    [SerializeField] PlayerStates currentState;
+    private enum PlayerStates
+    {
+        running,
+        attacking,
+        defending,
+        takingDamage,
+        dying,
+    }
 
     private bool isGrounded;
 
@@ -35,12 +51,11 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        HandleMovement();
-        HandleRotation();
+        PlayerStateMachine();
         GroundCheck();
     }
 
-    private void HandleMovement()
+    private void HandleMovement(float movementSpeed)
     {
         Vector3 camForward = gameManager.cameraContainer.transform.forward;
         Vector3 camRight = gameManager.cameraContainer.transform.right;
@@ -72,6 +87,47 @@ public class PlayerController : MonoBehaviour
         isGrounded = Physics.Raycast(groundRay,groundCheckDistance);
     }
 
+    private void PlayerStateMachine()
+    {
+        switch (currentState)
+        {
+            case PlayerStates.running:
+                HandleMovement(runningSpeed);
+                HandleRotation();
+                break;
+
+            case PlayerStates.attacking:
+                HandleMovement(attackingSpeed);
+                HandleRotation();
+                break;
+
+            case PlayerStates.defending:
+                HandleMovement(attackingSpeed);
+                HandleRotation();
+                break;
+
+            case PlayerStates.takingDamage:
+                HandleMovement(takingDamageSpeed);
+                HandleRotation();
+                break;
+        }
+
+        //Stamp fighting setting
+        if (currentStamp > 0)
+            currentStamp -= Time.deltaTime;
+
+        else if (currentState != PlayerStates.running)
+            SetCurrentState(PlayerStates.running);
+    }
+
+    private void SetCurrentState(PlayerStates state)
+    {
+        currentState = state;
+
+        if(state == PlayerStates.attacking || state == PlayerStates.defending)
+            currentStamp = attackStampMax;
+    }
+
 
     //Input getting
     private void OnMovement(InputValue value) => inputMovement = value.Get<Vector2>();
@@ -81,9 +137,11 @@ public class PlayerController : MonoBehaviour
     private void OnDefense()
     {
         Debug.Log("Defense");
+        SetCurrentState(PlayerStates.defending);
     }
     private void OnFire()
     {
         Debug.Log("Fire");
+        SetCurrentState(PlayerStates.attacking);
     }
 }

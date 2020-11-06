@@ -107,11 +107,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2afcd0315b4a97446bd97f4f88b339eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 10
+  runningSpeed: 10
+  attackingSpeed: 3
+  takingDamageSpeed: 3
   groundCheckDistance: 5
   rotationSmoothingAmount: 0.05
+  attackStampMax: 0.25
   mesh: {fileID: 6767604357945581243}
   gameManager: {fileID: 0}
+  currentState: 0
 --- !u!1 &6767604357945581244
 GameObject:
   m_ObjectHideFlags: 0
