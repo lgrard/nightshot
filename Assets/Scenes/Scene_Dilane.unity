@@ -253,9 +253,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targets:
   - {fileID: 1564800774}
-  - {fileID: 855414668}
-  - {fileID: 849296714}
-  - {fileID: 357713880}
   offset: {x: 0, y: 10, z: -5}
   smoothTime: 0.5
   minZoom: 90
