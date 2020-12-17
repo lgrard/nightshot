@@ -49,6 +49,22 @@ public class @PlayerInputAction : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""Dash"",
+                    ""type"": ""Button"",
+                    ""id"": ""f8ff6e42-be90-4e1a-a936-91ae0936c899"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""Melee"",
+                    ""type"": ""Button"",
+                    ""id"": ""8a66e2d2-e6dd-485a-991c-83a18891016e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
                 }
             ],
             ""bindings"": [
@@ -95,6 +111,28 @@ public class @PlayerInputAction : IInputActionCollection, IDisposable
                     ""action"": ""Defense"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""abdf67e3-89ac-4d4b-8d43-4f833a198061"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""793bed66-ddcb-498d-a708-17a275770ec5"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Melee"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -119,6 +157,8 @@ public class @PlayerInputAction : IInputActionCollection, IDisposable
         m_BasicScheme_Aiming = m_BasicScheme.FindAction("Aiming", throwIfNotFound: true);
         m_BasicScheme_Fire = m_BasicScheme.FindAction("Fire", throwIfNotFound: true);
         m_BasicScheme_Defense = m_BasicScheme.FindAction("Defense", throwIfNotFound: true);
+        m_BasicScheme_Dash = m_BasicScheme.FindAction("Dash", throwIfNotFound: true);
+        m_BasicScheme_Melee = m_BasicScheme.FindAction("Melee", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -172,6 +212,8 @@ public class @PlayerInputAction : IInputActionCollection, IDisposable
     private readonly InputAction m_BasicScheme_Aiming;
     private readonly InputAction m_BasicScheme_Fire;
     private readonly InputAction m_BasicScheme_Defense;
+    private readonly InputAction m_BasicScheme_Dash;
+    private readonly InputAction m_BasicScheme_Melee;
     public struct BasicSchemeActions
     {
         private @PlayerInputAction m_Wrapper;
@@ -180,6 +222,8 @@ public class @PlayerInputAction : IInputActionCollection, IDisposable
         public InputAction @Aiming => m_Wrapper.m_BasicScheme_Aiming;
         public InputAction @Fire => m_Wrapper.m_BasicScheme_Fire;
         public InputAction @Defense => m_Wrapper.m_BasicScheme_Defense;
+        public InputAction @Dash => m_Wrapper.m_BasicScheme_Dash;
+        public InputAction @Melee => m_Wrapper.m_BasicScheme_Melee;
         public InputActionMap Get() { return m_Wrapper.m_BasicScheme; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -201,6 +245,12 @@ public class @PlayerInputAction : IInputActionCollection, IDisposable
                 @Defense.started -= m_Wrapper.m_BasicSchemeActionsCallbackInterface.OnDefense;
                 @Defense.performed -= m_Wrapper.m_BasicSchemeActionsCallbackInterface.OnDefense;
                 @Defense.canceled -= m_Wrapper.m_BasicSchemeActionsCallbackInterface.OnDefense;
+                @Dash.started -= m_Wrapper.m_BasicSchemeActionsCallbackInterface.OnDash;
+                @Dash.performed -= m_Wrapper.m_BasicSchemeActionsCallbackInterface.OnDash;
+                @Dash.canceled -= m_Wrapper.m_BasicSchemeActionsCallbackInterface.OnDash;
+                @Melee.started -= m_Wrapper.m_BasicSchemeActionsCallbackInterface.OnMelee;
+                @Melee.performed -= m_Wrapper.m_BasicSchemeActionsCallbackInterface.OnMelee;
+                @Melee.canceled -= m_Wrapper.m_BasicSchemeActionsCallbackInterface.OnMelee;
             }
             m_Wrapper.m_BasicSchemeActionsCallbackInterface = instance;
             if (instance != null)
@@ -217,6 +267,12 @@ public class @PlayerInputAction : IInputActionCollection, IDisposable
                 @Defense.started += instance.OnDefense;
                 @Defense.performed += instance.OnDefense;
                 @Defense.canceled += instance.OnDefense;
+                @Dash.started += instance.OnDash;
+                @Dash.performed += instance.OnDash;
+                @Dash.canceled += instance.OnDash;
+                @Melee.started += instance.OnMelee;
+                @Melee.performed += instance.OnMelee;
+                @Melee.canceled += instance.OnMelee;
             }
         }
     }
@@ -236,5 +292,7 @@ public class @PlayerInputAction : IInputActionCollection, IDisposable
         void OnAiming(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
         void OnDefense(InputAction.CallbackContext context);
+        void OnDash(InputAction.CallbackContext context);
+        void OnMelee(InputAction.CallbackContext context);
     }
 }

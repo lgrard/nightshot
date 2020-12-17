@@ -18,14 +18,20 @@ public class PlayerController : MonoBehaviour
 
     private Vector2 inputMovement;
     private Vector2 inputRot;
+    private Vector3 DesiredRotation;
 
 
     [Header("Components")]
     [SerializeField] MeshRenderer mesh;
+    public Weapon currentWeapon = null;
     private Rigidbody rb;
 
     [Header("Object reference")]
     [SerializeField] GameManager gameManager;
+    [SerializeField] GameObject weaponMesh;
+    [SerializeField] GameObject throwableWeaponPrefab;
+    [SerializeField] Transform throwPoint;
+    [SerializeField] Transform firePoint;
 
     [Header("States")]
     [SerializeField] PlayerStates currentState;
@@ -36,6 +42,7 @@ public class PlayerController : MonoBehaviour
         defending,
         takingDamage,
         dying,
+        dashing,
     }
 
     private bool isGrounded;
@@ -45,6 +52,12 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = gameObject.GetComponent<Rigidbody>();
+    }
+
+    void OnEnable()
+    {
+        inputMovement = Vector2.zero;
+        inputRot = Vector2.zero;
     }
     #endregion
 
@@ -73,10 +86,14 @@ public class PlayerController : MonoBehaviour
         Vector3 camForward = gameManager.cameraContainer.transform.forward;
         Vector3 camRight = gameManager.cameraContainer.transform.right;
 
-        Vector3 DesiredRotation = camForward * inputRot.y + camRight * inputRot.x;
-
-        if (inputRot != Vector2.zero)
+        if (inputRot != Vector2.zero || currentStamp <= 0 && inputMovement != Vector2.zero)
         {
+            if(inputRot != Vector2.zero)
+                DesiredRotation = camForward * inputRot.y + camRight * inputRot.x;
+            
+            else if(currentStamp <= 0)
+                DesiredRotation = camForward * inputMovement.y + camRight * inputMovement.x;
+
             Quaternion desiredRotation = Quaternion.LookRotation(new Vector3(DesiredRotation.x, 0, DesiredRotation.z));
             mesh.transform.rotation = Quaternion.Slerp(desiredRotation, mesh.transform.rotation, rotationSmoothingAmount);
         }
@@ -128,6 +145,24 @@ public class PlayerController : MonoBehaviour
             currentStamp = attackStampMax;
     }
 
+    public void ChangeWeapon (Weapon weaponToPick)
+    {
+        if(weaponToPick != null)
+        {
+            currentWeapon = weaponToPick;
+            weaponMesh.GetComponent<MeshFilter>().mesh = weaponToPick.weaponMesh as Mesh;
+            weaponMesh.GetComponent<MeshRenderer>().material = weaponToPick.weaponMaterial as Material;
+            currentWeapon.Reload();
+        }
+
+        else
+        {
+            currentWeapon = null;
+            weaponMesh.GetComponent<MeshFilter>().mesh = null;
+            weaponMesh.GetComponent<MeshRenderer>().material = null;
+        }
+    }
+
 
     //Input getting
     private void OnMovement(InputValue value) => inputMovement = value.Get<Vector2>();
@@ -141,7 +176,41 @@ public class PlayerController : MonoBehaviour
     }
     private void OnFire()
     {
-        Debug.Log("Fire");
+        if (currentWeapon != null && currentWeapon.ammo > 0 && currentWeapon.canFire)
+        {
+            StartCoroutine(currentWeapon.Fire(firePoint));
+            SetCurrentState(PlayerStates.attacking);
+        }
+
+        else
+            Debug.Log("Gé po d'arme");
+    }
+    private void OnDash()
+    {
+        Debug.Log("Dash");
+        SetCurrentState(PlayerStates.dashing);
+    }
+    private void OnMelee()
+    {
         SetCurrentState(PlayerStates.attacking);
+
+        if (currentWeapon != null)
+        {
+            GameObject thrownWeapon = (GameObject)Instantiate(throwableWeaponPrefab);
+            ThrowableWeapon thrownWeaponComponent = thrownWeapon.GetComponent<ThrowableWeapon>();
+
+            thrownWeaponComponent.thrownWeapon = currentWeapon;
+            thrownWeaponComponent.transform.position = throwPoint.position;
+            thrownWeaponComponent.transform.rotation = throwPoint.rotation;
+
+            currentWeapon.ReduceUsage();
+
+            ChangeWeapon(null);
+        }
+
+        else
+        {
+            Debug.Log("Melee");
+        }
     }
 }
