@@ -63,5 +63,13 @@ public class WeaponEditor : Editor
             GUILayout.Label("Angle", EditorStyles.boldLabel);
             weapon.angle = EditorGUILayout.FloatField("Fire angle", weapon.angle);
         }
+
+        EditorGUILayout.Space();
+        if (GUILayout.Button("Save"))
+        {
+            EditorUtility.SetDirty(weapon);
+            AssetDatabase.SaveAssets();
+            Debug.Log(weapon.name + " has been saved");
+        }
     }
 }

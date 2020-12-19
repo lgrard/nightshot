@@ -182,8 +182,11 @@ public class PlayerController : MonoBehaviour
             SetCurrentState(PlayerStates.attacking);
         }
 
-        else
-            Debug.Log("Gé po d'arme");
+        else if (currentWeapon == null)
+            Debug.Log("No weapon equiped");
+
+        else if (currentWeapon.ammo > 0)
+            Debug.Log("No ammo");
     }
     private void OnDash()
     {

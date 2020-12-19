@@ -7,7 +7,10 @@ public class ThrowableWeapon : MonoBehaviour
     public Weapon thrownWeapon;
     [SerializeField] GameObject mesh;
     [SerializeField] float throwForce = 100f;
-    bool isPickable = true;
+    [SerializeField] float minimumHitForce = 80f;
+    [SerializeField] Vector3 impactBounce;
+
+    bool isPickable = false;
     Rigidbody rb;
 
     private void Start()
@@ -40,11 +43,15 @@ public class ThrowableWeapon : MonoBehaviour
 
             else
             {
-                if (thrownWeapon.numberOfUsage > 1)
-                    Debug.Log("J'ai été touché par l'arme " + thrownWeapon.ToString());
+                if (thrownWeapon.numberOfUsage > 1 && rb.velocity.magnitude >= minimumHitForce)
+                {
+                    Debug.Log("weapon bounce");
+                    Vector3 impactBounceDirection = new Vector3(impactBounce.x * transform.right.x, impactBounce.y * transform.up.y, impactBounce.z * transform.forward.z);
+                    rb.velocity = impactBounceDirection;
+                }
 
-                else
-                    Destroy(gameObject);
+                //else
+                    //Destroy(gameObject);
             }
         }
 

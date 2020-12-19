@@ -12,15 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c32f1bfb361210444af96d6e6dc1c664, type: 3}
   m_Name: Pistol
   m_EditorClassIdentifier: 
-  weaponName: 
+  weaponName: Pistol
   type: 0
-  attackDamage: 1
-  maxAmmo: 5
-  fireRate: 1
-  dispertion: 1
+  attackDamage: 5
+  burstCount: 1
+  maxAmmo: 8
+  ammo: 0
+  numberOfUsageMax: 3
+  numberOfUsage: 3
+  fireRate: 0.2
+  burstSpacing: 0.05
+  dispertion: 0.1
+  bulletTravelTime: 0.05
   projectileSpeed: 1
   angle: 20
-  weaponMesh: {fileID: 0}
+  weaponMesh: {fileID: 4300000, guid: e4509cca6ed80924fa4824a760b50e78, type: 3}
+  weaponMaterial: {fileID: 2100000, guid: 06d40dc2e1401784eb420a0d2d5d7235, type: 2}
   projectileMesh: {fileID: 0}
-  muzzleFlash: {fileID: 0}
-  impactEffect: {fileID: 0}
+  projectileMaterial: {fileID: 0}
+  muzzleFlash: {fileID: 4268830454406357431, guid: 808b1a54848f3894e9b2cf3af42778a8, type: 3}
+  impactEffect: {fileID: 4268830454406357431, guid: 808b1a54848f3894e9b2cf3af42778a8, type: 3}
+  bulletTrail: {fileID: 7063830456377782545, guid: 3de709c740f3ca04cb2c50d755579a0b, type: 3}
+  canFire: 1
