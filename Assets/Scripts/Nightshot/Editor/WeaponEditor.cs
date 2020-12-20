@@ -54,9 +54,9 @@ public class WeaponEditor : Editor
         {
             GUILayout.Label("This weapon uses delayed projectiles");
             GUILayout.Label("Projectile", EditorStyles.boldLabel);
-            weapon.projectileSpeed = EditorGUILayout.FloatField("Projectile speed",weapon.projectileSpeed);
-            weapon.projectileMesh = EditorGUILayout.ObjectField("Projectile mesh", weapon.projectileMesh,typeof(Mesh), false);
-            weapon.projectileMaterial = EditorGUILayout.ObjectField("Projectile material", weapon.projectileMaterial, typeof(Material), false);
+            weapon.constantSpeed = EditorGUILayout.Toggle("Does the projectile have constant speed", weapon.constantSpeed);
+            weapon.projectileSpeed = EditorGUILayout.FloatField("Projectile speed", weapon.projectileSpeed);
+            weapon.projectilePrefab = EditorGUILayout.ObjectField("Projectile prefab", weapon.projectilePrefab, typeof(GameObject), false);
         }
 
         if (weapon.type == Weapon.weaponType.hitscanZone)

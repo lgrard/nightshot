@@ -29,16 +29,16 @@ public class Weapon : ScriptableObject
     public float burstSpacing = 0.05f;
     public float dispertion = 0.3f;
     public float bulletTravelTime = 0.8f;
-    public float projectileSpeed = 1f;
     public float angle = 20f;
     public float weaponRange = 20f;
+    public float projectileSpeed = 1f;
+    public bool constantSpeed = true;
 
     [Header("Weapon visual")]
     public Object weaponMesh;
     public Vector3 firePointOffset = new Vector3 (0f,0.15f,0.75f);
     public Object weaponMaterial;
-    public Object projectileMesh;
-    public Object projectileMaterial;
+    public Object projectilePrefab;
     public Object muzzleFlash;
     public Object impactEffect;
     public Object bulletTrail;
@@ -61,22 +61,22 @@ public class Weapon : ScriptableObject
         
         for (int i = burstCount; i>0; i--)
         {
+            GameObject muzzleFlashObject = (GameObject)Instantiate(muzzleFlash, origin);
+            Destroy(muzzleFlashObject, muzzleFlashObject.GetComponent<ParticleSystem>().main.duration);
+
             switch (type)
             {
                 case weaponType.hitscanRay:
                     ammo--;
 
-                    GameObject muzzleFlashObject = (GameObject)Instantiate(muzzleFlash, origin);
-                    Destroy(muzzleFlashObject, muzzleFlashObject.GetComponent<ParticleSystem>().main.duration);
-
                     GameObject trailObject = (GameObject)Instantiate(bulletTrail);
                     trailObject.transform.position = origin.position;
 
-                    Vector3 direction = origin.transform.forward;
-                    direction.x += Random.Range(-dispertion, dispertion);
-                    direction.y += Random.Range(-dispertion, dispertion);
-                    direction.z += Random.Range(-dispertion, dispertion);
-                    Physics.Raycast(origin.position, direction, out RaycastHit hit);
+                    Vector3 directionRay = origin.transform.forward;
+                    directionRay.x += Random.Range(-dispertion, dispertion);
+                    directionRay.y += Random.Range(-dispertion, dispertion);
+                    directionRay.z += Random.Range(-dispertion, dispertion);
+                    Physics.Raycast(origin.position, directionRay, out RaycastHit hit);
 
                     if (i > 0)
                         yield return new WaitForSeconds(bulletTravelTime);
@@ -106,6 +106,16 @@ public class Weapon : ScriptableObject
                     }
 
                     break;
+
+
+                case weaponType.projectile:
+                    ammo--;
+                    GameObject projectileObject = (GameObject)Instantiate(projectilePrefab);
+                    projectileObject.GetComponent<Projectile>().weapon = this;
+                    projectileObject.transform.position = origin.position;
+                    projectileObject.transform.rotation = origin.rotation;
+                    break;
+
             }
 
             if (i > 0)

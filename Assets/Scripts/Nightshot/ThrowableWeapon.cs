@@ -46,51 +46,35 @@ public class ThrowableWeapon : MonoBehaviour
             StartCoroutine(Bounce());
     }
 
-    private void OnTriggerEnter (Collider collision)
+    private void OnTriggerEnter(Collider collision)
     {
         collision.gameObject.TryGetComponent<PlayerController>(out PlayerController playerController);
 
-        if (playerController != null)
+        if (thrownWeapon.numberOfUsage >= 1)
         {
-            if(isPickable)
+            if (playerController != null)
             {
-                if (thrownWeapon.numberOfUsage >= 1)
+                if (isPickable)
                 {
                     playerController.ChangeWeapon(thrownWeapon);
                     Despawn(false);
                 }
+
+                else if (rb.velocity.magnitude >= minimumHitForce)
+                    StartCoroutine(Bounce());
             }
 
             else
             {
-                if (thrownWeapon.numberOfUsage >= 1)
-                {
-                    if (rb.velocity.magnitude >= minimumHitForce)
-                        StartCoroutine(Bounce());
-
-                    else
-                    {
-                        isPickable = true;
-                    }
-                }
-
-                else
-                    Despawn(true);
+                Replace(transform.position);
+                isPickable = true;
             }
         }
 
         else
-        {
-            if (thrownWeapon.numberOfUsage >= 1)
-            {
-                isPickable = true;
-                rb.isKinematic = true;
-            }
-
-            else
-                Despawn(true);
-        }
+            Despawn(true);
     }
+
 
     void Despawn(bool destroyWeapon)
     {
@@ -104,6 +88,15 @@ public class ThrowableWeapon : MonoBehaviour
         
         if(indicator!= null)
             Destroy(indicator);
+    }
+
+    void Replace(Vector3 origin)
+    {
+        rb.isKinematic = true;
+
+        NavMeshHit hit;
+        NavMesh.SamplePosition(origin, out hit, dropRadius, 1);
+        transform.position = hit.position + new Vector3(0, 0.4f, 0);
     }
 
     IEnumerator Bounce()
