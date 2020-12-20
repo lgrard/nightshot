@@ -8,6 +8,8 @@ using static UnityEngine.InputSystem.InputAction;
 public class PlayerController : MonoBehaviour
 {
     [Header("Values")]
+    [SerializeField] int maxHP = 10;
+    private int HP = 10;
     [SerializeField] float runningSpeed = 10;
     [SerializeField] float attackingSpeed = 5;
     [SerializeField] float takingDamageSpeed = 5;
@@ -15,6 +17,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float rotationSmoothingAmount = 0.01f;
     [SerializeField] float attackStampMax = 1f;
     private float currentStamp = 0f;
+    [SerializeField] int attackDamage = 1;
+    [SerializeField] float attackRadius = 1f;
+    [SerializeField] LayerMask attackLayers;
 
     private Vector2 inputMovement;
     private Vector2 inputRot;
@@ -32,6 +37,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject throwableWeaponPrefab;
     [SerializeField] Transform throwPoint;
     [SerializeField] Transform firePoint;
+    [SerializeField] Transform meleePoint;
 
     [Header("States")]
     [SerializeField] PlayerStates currentState;
@@ -47,6 +53,10 @@ public class PlayerController : MonoBehaviour
 
     private bool isGrounded;
 
+    [Header("Preview zone and points")]
+    [Tooltip("Red = Melee box, Green = Throw point, Blue = Fire point")]
+    [SerializeField] bool displayBoxes;
+
 
     #region Initialize
     void Start()
@@ -58,8 +68,10 @@ public class PlayerController : MonoBehaviour
     {
         inputMovement = Vector2.zero;
         inputRot = Vector2.zero;
+        HP = maxHP;
     }
     #endregion
+
 
     // Update is called once per frame
     void Update()
@@ -104,6 +116,8 @@ public class PlayerController : MonoBehaviour
         isGrounded = Physics.Raycast(groundRay,groundCheckDistance);
     }
 
+
+    //State machine methods
     private void PlayerStateMachine()
     {
         switch (currentState)
@@ -136,7 +150,6 @@ public class PlayerController : MonoBehaviour
         else if (currentState != PlayerStates.running)
             SetCurrentState(PlayerStates.running);
     }
-
     private void SetCurrentState(PlayerStates state)
     {
         currentState = state;
@@ -145,6 +158,8 @@ public class PlayerController : MonoBehaviour
             currentStamp = attackStampMax;
     }
 
+
+    //Change current weapon method
     public void ChangeWeapon (Weapon weaponToPick)
     {
         if(weaponToPick != null)
@@ -169,7 +184,7 @@ public class PlayerController : MonoBehaviour
     private void OnMovement(InputValue value) => inputMovement = value.Get<Vector2>();
     private void OnAiming(InputValue value) => inputRot = value.Get<Vector2>();
 
-
+    //Input press
     private void OnDefense()
     {
         Debug.Log("Defense");
@@ -199,22 +214,76 @@ public class PlayerController : MonoBehaviour
         SetCurrentState(PlayerStates.attacking);
 
         if (currentWeapon != null)
-        {
-            GameObject thrownWeapon = (GameObject)Instantiate(throwableWeaponPrefab);
-            ThrowableWeapon thrownWeaponComponent = thrownWeapon.GetComponent<ThrowableWeapon>();
-
-            thrownWeaponComponent.thrownWeapon = currentWeapon;
-            thrownWeaponComponent.transform.position = throwPoint.position;
-            thrownWeaponComponent.transform.rotation = throwPoint.rotation;
-
-            currentWeapon.ReduceUsage();
-
-            ChangeWeapon(null);
-        }
+            DropWeapon(true);
 
         else
         {
             Debug.Log("Melee");
+            MeleeAttack();
+        }
+    }
+
+    private void MeleeAttack()
+    {
+        Collider[] targetHits;
+        targetHits = Physics.OverlapSphere(meleePoint.position, attackRadius, attackLayers);
+
+        foreach (Collider targetHit in targetHits)
+        {
+            targetHit.gameObject.TryGetComponent<PlayerController>(out PlayerController playerController);
+            if (playerController != null)
+            {
+                Debug.Log(playerController.gameObject.name + " hit");
+                playerController.TakeDamage(attackDamage);
+            }
+        }
+    }
+
+    public void TakeDamage(int damageToTake)
+    {
+        HP -= damageToTake;
+
+        if (HP <= 0)
+        {
+            if (currentWeapon != null && currentWeapon.numberOfUsage >= 1)
+                DropWeapon(false);
+
+            Debug.Log(gameObject.name + " is dead");
+            gameManager.RemovePlayer(transform);
+            Destroy(gameObject);
+        }
+    }
+
+    private void DropWeapon(bool isThrown)
+    {
+        GameObject thrownWeapon = (GameObject)Instantiate(throwableWeaponPrefab);
+        ThrowableWeapon thrownWeaponComponent = thrownWeapon.GetComponent<ThrowableWeapon>();
+
+        thrownWeaponComponent.thrownWeapon = currentWeapon;
+        thrownWeaponComponent.transform.position = throwPoint.position;
+        thrownWeaponComponent.transform.rotation = throwPoint.rotation;
+        thrownWeaponComponent.isThrown = isThrown;
+
+        currentWeapon.ReduceUsage();
+
+        ChangeWeapon(null);
+    }
+
+
+    //Draw various things on Gizmo
+    private void OnDrawGizmos()
+    {
+        if (displayBoxes)
+        {
+
+            Gizmos.color = Color.green;
+            Gizmos.DrawSphere(throwPoint.position, 0.1f); //Player throw point
+
+            Gizmos.color = Color.blue;
+            Gizmos.DrawSphere(firePoint.position, 0.1f); //Player fire point
+
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(meleePoint.position, attackRadius); //Player fire point
         }
     }
 }

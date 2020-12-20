@@ -19,6 +19,8 @@ public class ThrowableWeapon : MonoBehaviour
     [SerializeField] float dropRadius;
     [SerializeField] float dropHeight = 3;
     [SerializeField] float dropTime = 2;
+    [SerializeField] float meshRotationSpeed = 2;
+    public bool isThrown = true;
 
     [Header("Curves")]
     [SerializeField] AnimationCurve horizontalDropCurve;
@@ -32,11 +34,16 @@ public class ThrowableWeapon : MonoBehaviour
     private void Start()
     {
         rb = gameObject.GetComponent<Rigidbody>();
-        rb.velocity = transform.forward * throwForce;
         mesh.GetComponent<MeshFilter>().mesh = thrownWeapon.weaponMesh as Mesh;
         mesh.GetComponent<MeshRenderer>().material = thrownWeapon.weaponMaterial as Material;
 
         mesh.transform.Rotate(new Vector3(Random.Range(0,100), Random.Range(0, 100), Random.Range(0, 100)));
+
+        if(isThrown)
+            rb.velocity = transform.forward * throwForce;
+
+        else
+            StartCoroutine(Bounce());
     }
 
     private void OnTriggerEnter (Collider collision)
@@ -130,7 +137,7 @@ public class ThrowableWeapon : MonoBehaviour
             if(progressionValue >= 0.5)
                 isPickable = true;
 
-            mesh.transform.Rotate(Vector3.one*2);
+            mesh.transform.Rotate(Vector3.one* meshRotationSpeed);
             indicator.transform.position = nextPosition;
 
             yield return new WaitForFixedUpdate();

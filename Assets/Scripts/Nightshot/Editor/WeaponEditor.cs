@@ -45,6 +45,7 @@ public class WeaponEditor : Editor
             GUILayout.Label("This weapon uses instant hitscan in a ray");
             GUILayout.Label("Dispertion", EditorStyles.boldLabel);
             weapon.dispertion = EditorGUILayout.FloatField("Dispertion rate", weapon.dispertion);
+            weapon.weaponRange = EditorGUILayout.FloatField("Range", weapon.weaponRange);
             weapon.bulletTravelTime = EditorGUILayout.FloatField("Bullet trail travel time", weapon.bulletTravelTime);
             weapon.bulletTrail = EditorGUILayout.ObjectField("Bullet Trail", weapon.bulletTrail, typeof(GameObject), false);
         }

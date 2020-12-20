@@ -188,9 +188,11 @@ MonoBehaviour:
   indicatorPrefab: {fileID: 5082064394815526809, guid: bd02e1a319dde1d47b307edb17a61fcb, type: 3}
   throwForce: 35
   minimumHitForce: 2
-  dropRadius: 3
+  dropRadius: 5
   dropHeight: 2
-  dropTime: 2
+  dropTime: 1.5
+  meshRotationSpeed: 5
+  isThrown: 1
   horizontalDropCurve:
     serializedVersion: 2
     m_Curve:

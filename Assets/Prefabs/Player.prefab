@@ -30,6 +30,36 @@ Transform:
   m_Father: {fileID: 6767604359167864862}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2654999534151924985
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1769948676102209320}
+  m_Layer: 0
+  m_Name: MeleePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1769948676102209320
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2654999534151924985}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.4, z: 1.49}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6767604357945581240}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5397064742216351418
 GameObject:
   m_ObjectHideFlags: 0
@@ -206,7 +236,7 @@ GameObject:
   - component: {fileID: 6767604357518582034}
   - component: {fileID: 6767604357518582035}
   - component: {fileID: 6767604357518582045}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -300,12 +330,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2afcd0315b4a97446bd97f4f88b339eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHP: 10
   runningSpeed: 10
   attackingSpeed: 5
   takingDamageSpeed: 5
   groundCheckDistance: 5
   rotationSmoothingAmount: 0.8
   attackStampMax: 0.5
+  attackDamage: 1
+  attackRadius: 1
+  attackLayers:
+    serializedVersion: 2
+    m_Bits: 256
   mesh: {fileID: 6767604357945581243}
   currentWeapon: {fileID: 0}
   gameManager: {fileID: 0}
@@ -313,7 +349,9 @@ MonoBehaviour:
   throwableWeaponPrefab: {fileID: 2882903495473936574, guid: 24772aa1b1461e4458b024e33bc93377, type: 3}
   throwPoint: {fileID: 2440791134767236153}
   firePoint: {fileID: 4141772217298020222}
+  meleePoint: {fileID: 1769948676102209320}
   currentState: 0
+  displayBoxes: 0
 --- !u!1 &6767604357945581244
 GameObject:
   m_ObjectHideFlags: 0
@@ -346,6 +384,7 @@ Transform:
   - {fileID: 1841924703816768859}
   - {fileID: 6767604359167864862}
   - {fileID: 2440791134767236153}
+  - {fileID: 1769948676102209320}
   m_Father: {fileID: 6767604357518582046}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -31,6 +31,7 @@ public class Weapon : ScriptableObject
     public float bulletTravelTime = 0.8f;
     public float projectileSpeed = 1f;
     public float angle = 20f;
+    public float weaponRange = 20f;
 
     [Header("Weapon visual")]
     public Object weaponMesh;
@@ -80,15 +81,30 @@ public class Weapon : ScriptableObject
                     if (i > 0)
                         yield return new WaitForSeconds(bulletTravelTime);
 
-                    if(hit.collider != null)
+
+                    if (hit.collider != null)
                     {
-                        Debug.Log(hit.collider.name);
-                        trailObject.transform.position = hit.point;
-                        
-                        GameObject impactEffectObject = (GameObject)Instantiate(impactEffect);
-                        impactEffectObject.transform.position = hit.point;
+                        Debug.Log(hit.collider.gameObject.name);
+
+                        hit.collider.gameObject.TryGetComponent<PlayerController>(out PlayerController playerController);
+                        if (playerController != null)
+                        {
+                            Debug.Log(playerController.gameObject.name + " hit");
+                            playerController.TakeDamage(attackDamage);
+                        }
+
+                            GameObject impactEffectObject = (GameObject)Instantiate(impactEffect);
                         Destroy(impactEffectObject, impactEffectObject.GetComponent<ParticleSystem>().main.duration);
+                        
+                        trailObject.transform.position = hit.point;
+                        impactEffectObject.transform.position = hit.point;
                     }
+
+                    else
+                    {
+                        trailObject.transform.position = origin.position + origin.forward*weaponRange;
+                    }
+
                     break;
             }
 

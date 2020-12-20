@@ -26,6 +26,7 @@ MonoBehaviour:
   bulletTravelTime: 0.05
   projectileSpeed: 1
   angle: 20
+  weaponRange: 20
   weaponMesh: {fileID: 4300000, guid: e4509cca6ed80924fa4824a760b50e78, type: 3}
   firePointOffset: {x: 0, y: 0.12, z: 0.35}
   weaponMaterial: {fileID: 2100000, guid: 06d40dc2e1401784eb420a0d2d5d7235, type: 2}
