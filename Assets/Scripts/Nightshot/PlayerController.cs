@@ -152,6 +152,7 @@ public class PlayerController : MonoBehaviour
             currentWeapon = weaponToPick;
             weaponMesh.GetComponent<MeshFilter>().mesh = weaponToPick.weaponMesh as Mesh;
             weaponMesh.GetComponent<MeshRenderer>().material = weaponToPick.weaponMaterial as Material;
+            firePoint.transform.localPosition = currentWeapon.firePointOffset;
             currentWeapon.Reload();
         }
 

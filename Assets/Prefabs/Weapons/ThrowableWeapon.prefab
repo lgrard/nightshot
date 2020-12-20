@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1072238968492723921}
   - component: {fileID: 610307115274483990}
-  - component: {fileID: 6826093022547146398}
+  - component: {fileID: 1818441237132927595}
   - component: {fileID: 6020581260376029944}
   - component: {fileID: 4475886080455017840}
   m_Layer: 0
@@ -51,18 +51,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!65 &6826093022547146398
-BoxCollider:
+--- !u!135 &1818441237132927595
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2882903495473936574}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Radius: 0.4
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!96 &6020581260376029944
 TrailRenderer:
@@ -185,9 +185,87 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   thrownWeapon: {fileID: 0}
   mesh: {fileID: 5881128794094769942}
-  throwForce: 30
-  minimumHitForce: 10
-  impactBounce: {x: 0, y: 20, z: -20}
+  indicatorPrefab: {fileID: 5082064394815526809, guid: bd02e1a319dde1d47b307edb17a61fcb, type: 3}
+  throwForce: 35
+  minimumHitForce: 2
+  dropRadius: 3
+  dropHeight: 2
+  dropTime: 2
+  horizontalDropCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2.8294356
+      outSlope: 2.8294356
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.03807944
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  verticalDropCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -2.2569969
+      outSlope: -2.2569969
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 1
+    - serializedVersion: 3
+      time: 0.30547652
+      value: 0.09943387
+      inSlope: -1.7345011
+      outSlope: -1.7345011
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.49337745
+      value: 0.0015502037
+      inSlope: -0.014944047
+      outSlope: -0.014944047
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.6927152
+      value: 0.09943387
+      inSlope: 1.7108829
+      outSlope: 1.7108829
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 3.3625772
+      outSlope: 3.3625772
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.25616467
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &5881128794094769942
 GameObject:
   m_ObjectHideFlags: 0
@@ -227,7 +305,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5881128794094769942}
-  m_Mesh: {fileID: 0}
+  m_Mesh: {fileID: 4300000, guid: e4509cca6ed80924fa4824a760b50e78, type: 3}
 --- !u!23 &2210751513439198915
 MeshRenderer:
   m_ObjectHideFlags: 0

@@ -37,6 +37,7 @@ public class WeaponEditor : Editor
         weapon.weaponMaterial = EditorGUILayout.ObjectField("Weapon material", weapon.weaponMaterial, typeof(Material), false);
         weapon.muzzleFlash = EditorGUILayout.ObjectField("Muzzle flash", weapon.muzzleFlash, typeof(GameObject), false);
         weapon.impactEffect = EditorGUILayout.ObjectField("Impact effect", weapon.impactEffect, typeof(GameObject), false);
+        weapon.firePointOffset = EditorGUILayout.Vector3Field("Fire point position offset", weapon.firePointOffset);
         EditorGUILayout.Space();
 
         if (weapon.type == Weapon.weaponType.hitscanRay)

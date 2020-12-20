@@ -34,6 +34,7 @@ public class Weapon : ScriptableObject
 
     [Header("Weapon visual")]
     public Object weaponMesh;
+    public Vector3 firePointOffset = new Vector3 (0f,0.15f,0.75f);
     public Object weaponMaterial;
     public Object projectileMesh;
     public Object projectileMaterial;
