@@ -333,7 +333,7 @@ MonoBehaviour:
   maxHP: 10
   dashAmount: 3
   maxDashTime: 0.05
-  runningSpeed: 10
+  runningSpeed: 7
   attackingSpeed: 5
   takingDamageSpeed: 5
   groundCheckDistance: 5

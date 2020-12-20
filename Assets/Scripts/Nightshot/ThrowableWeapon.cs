@@ -104,11 +104,11 @@ public class ThrowableWeapon : MonoBehaviour
         rb.isKinematic = true;
 
         Vector3 lastPosition = transform.position;
-        Vector3 nextPosition = (Random.insideUnitCircle* dropRadius);
+        Vector3 nextPosition = (Random.insideUnitCircle.normalized* dropRadius);
         nextPosition += lastPosition;
         NavMeshHit hit;
 
-        NavMesh.SamplePosition(nextPosition, out hit, dropRadius, 1);
+        NavMesh.SamplePosition(nextPosition, out hit, dropRadius*2, 1);
         nextPosition = hit.position + new Vector3(0,0.4f,0);
 
         indicator = GameObject.Instantiate(indicatorPrefab);

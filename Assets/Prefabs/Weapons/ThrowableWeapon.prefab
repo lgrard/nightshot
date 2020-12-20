@@ -188,7 +188,7 @@ MonoBehaviour:
   indicatorPrefab: {fileID: 5082064394815526809, guid: bd02e1a319dde1d47b307edb17a61fcb, type: 3}
   throwForce: 35
   minimumHitForce: 2
-  dropRadius: 5
+  dropRadius: 4
   dropHeight: 2
   dropTime: 1.5
   meshRotationSpeed: 5
@@ -230,32 +230,32 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 1
     - serializedVersion: 3
-      time: 0.30547652
+      time: 0.4379087
       value: 0.09943387
-      inSlope: -1.7345011
-      outSlope: -1.7345011
+      inSlope: -1.2887241
+      outSlope: -1.2887241
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.49337745
+      time: 0.6258096
       value: 0.0015502037
-      inSlope: -0.014944047
-      outSlope: -0.014944047
+      inSlope: 0.15695333
+      outSlope: 0.15695333
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.6927152
-      value: 0.09943387
-      inSlope: 1.7108829
-      outSlope: 1.7108829
-      tangentMode: 34
+      time: 0.7506441
+      value: 0.1057669
+      inSlope: 1.3853089
+      outSlope: 1.3853089
+      tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+      inWeight: 0.30232546
+      outWeight: 0.5617664
     - serializedVersion: 3
       time: 1
       value: 1
