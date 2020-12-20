@@ -331,6 +331,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHP: 10
+  dashAmount: 3
+  maxDashTime: 0.05
   runningSpeed: 10
   attackingSpeed: 5
   takingDamageSpeed: 5
@@ -342,6 +344,9 @@ MonoBehaviour:
   attackLayers:
     serializedVersion: 2
     m_Bits: 256
+  dashLayer:
+    serializedVersion: 2
+    m_Bits: 0
   mesh: {fileID: 6767604357945581243}
   currentWeapon: {fileID: 0}
   gameManager: {fileID: 0}
@@ -462,14 +467,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6767604359167864863}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: -0.026176924, z: 0, w: 0.99965733}
   m_LocalPosition: {x: 0.59, y: -0.074353, z: 0.466}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4141772217298020222}
   m_Father: {fileID: 6767604357945581240}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -3, z: 0}
 --- !u!33 &6767604359167864859
 MeshFilter:
   m_ObjectHideFlags: 0

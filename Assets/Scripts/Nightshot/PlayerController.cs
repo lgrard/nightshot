@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
     [Header("Values")]
     [SerializeField] int maxHP = 10;
     private int HP = 10;
+    [SerializeField] float dashAmount = 20;
+    [SerializeField] float maxDashTime = 1;
     [SerializeField] float runningSpeed = 10;
     [SerializeField] float attackingSpeed = 5;
     [SerializeField] float takingDamageSpeed = 5;
@@ -20,6 +22,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] int attackDamage = 1;
     [SerializeField] float attackRadius = 1f;
     [SerializeField] LayerMask attackLayers;
+    [SerializeField] LayerMask dashLayer;
 
     private Vector2 inputMovement;
     private Vector2 inputRot;
@@ -208,6 +211,23 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("Dash");
         SetCurrentState(PlayerStates.dashing);
+
+        Vector3 moveDirection = new Vector3(inputMovement.x, 0, inputMovement.y).normalized * dashAmount;
+        if (moveDirection == Vector3.zero)
+            moveDirection = mesh.transform.forward*dashAmount;
+        
+        Vector3 lastPosition = transform.position;
+        Vector3 nextPosition = transform.position + moveDirection;
+
+        RaycastHit hit;
+
+        if (Physics.Raycast(transform.position, moveDirection, out hit) && Vector3.Distance(hit.point, transform.position) < dashAmount)
+        {
+            Debug.Log("Something in front");
+        }
+
+        else
+            StartCoroutine(Dash(lastPosition, nextPosition));
     }
     private void OnMelee()
     {
@@ -223,6 +243,19 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
+    private IEnumerator Dash(Vector3 destination, Vector3 origin)
+    {
+        float dashTime = maxDashTime;
+        
+        while (dashTime > 0)
+        {
+            float dashProgress = dashTime / maxDashTime;
+            transform.position = Vector3.Lerp(origin, destination, dashProgress);
+            dashTime -= Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+    }
     private void MeleeAttack()
     {
         Collider[] targetHits;
@@ -238,7 +271,6 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
     public void TakeDamage(int damageToTake)
     {
         HP -= damageToTake;
@@ -253,7 +285,6 @@ public class PlayerController : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
     private void DropWeapon(bool isThrown)
     {
         GameObject thrownWeapon = (GameObject)Instantiate(throwableWeaponPrefab);
@@ -273,9 +304,13 @@ public class PlayerController : MonoBehaviour
     //Draw various things on Gizmo
     private void OnDrawGizmos()
     {
+        Vector3 movementEnd = new Vector3(transform.position.x + inputMovement.x*2, transform.position.y, transform.position.z + inputMovement.y*2);
+        Vector3 lookEnd = new Vector3(transform.position.x + inputRot.x*4, transform.position.y, transform.position.z + inputRot.y*4);
+        Gizmos.DrawLine(transform.position, movementEnd);
+        Gizmos.DrawLine(transform.position, lookEnd);
+
         if (displayBoxes)
         {
-
             Gizmos.color = Color.green;
             Gizmos.DrawSphere(throwPoint.position, 0.1f); //Player throw point
 

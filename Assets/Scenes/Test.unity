@@ -657,7 +657,7 @@ PrefabInstance:
     - target: {fileID: 1662490180307765684, guid: cb9ea6c040ad9cd41b01fb82e84aa64f, type: 3}
       propertyPath: weaponToPick
       value: 
-      objectReference: {fileID: 11400000, guid: 61b3f066a3beadd4698eb59d6575c826, type: 2}
+      objectReference: {fileID: 11400000, guid: 3d0301a2180a00142b0b8e58425cc07f, type: 2}
     - target: {fileID: 1662490180307765687, guid: cb9ea6c040ad9cd41b01fb82e84aa64f, type: 3}
       propertyPath: m_Name
       value: PickableWeapon (1)

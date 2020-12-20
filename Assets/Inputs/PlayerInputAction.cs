@@ -23,7 +23,7 @@ public class @PlayerInputAction : IInputActionCollection, IDisposable
                     ""type"": ""Value"",
                     ""id"": ""70cc3454-697d-4676-8414-73dc7121fb05"",
                     ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
+                    ""processors"": ""StickDeadzone(min=0.2)"",
                     ""interactions"": """"
                 },
                 {
@@ -31,7 +31,7 @@ public class @PlayerInputAction : IInputActionCollection, IDisposable
                     ""type"": ""Value"",
                     ""id"": ""a57ce33b-768b-45f5-9043-537652ead438"",
                     ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
+                    ""processors"": ""StickDeadzone(min=0.2)"",
                     ""interactions"": """"
                 },
                 {

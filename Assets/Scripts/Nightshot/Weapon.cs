@@ -93,7 +93,7 @@ public class Weapon : ScriptableObject
                             playerController.TakeDamage(attackDamage);
                         }
 
-                            GameObject impactEffectObject = (GameObject)Instantiate(impactEffect);
+                        GameObject impactEffectObject = (GameObject)Instantiate(impactEffect);
                         Destroy(impactEffectObject, impactEffectObject.GetComponent<ParticleSystem>().main.duration);
                         
                         trailObject.transform.position = hit.point;
@@ -118,7 +118,7 @@ public class Weapon : ScriptableObject
 
             }
 
-            if (i > 0)
+            if (i > 1)
                 yield return new WaitForSeconds(burstSpacing);
         }
 
