@@ -40,6 +40,12 @@ public class WeaponEditor : Editor
         weapon.firePointOffset = EditorGUILayout.Vector3Field("Fire point position offset", weapon.firePointOffset);
         EditorGUILayout.Space();
 
+        GUILayout.Label("ScreenShake", EditorStyles.boldLabel);
+        weapon.screenshakeDuration = EditorGUILayout.FloatField("Screenshake duration", weapon.screenshakeDuration);
+        weapon.screenshakeMagnitude = EditorGUILayout.FloatField("Screenshake magnitude", weapon.screenshakeMagnitude);
+        EditorGUILayout.Space();
+
+
         if (weapon.type == Weapon.weaponType.hitscanRay)
         {
             GUILayout.Label("This weapon uses instant hitscan in a ray");

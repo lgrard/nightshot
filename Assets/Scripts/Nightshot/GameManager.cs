@@ -5,9 +5,13 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public GameObject cameraContainer;
+    private CameraMovement cameraMovement;
 
-    public void RemovePlayer(Transform playerToRemove)
+    private void Start()
     {
-        cameraContainer.GetComponent<CameraMovement>().targets.Remove(playerToRemove);
+        cameraMovement = cameraContainer.GetComponent<CameraMovement>();
     }
+
+    public void RemovePlayer(Transform playerToRemove) => cameraMovement.targets.Remove(playerToRemove);
+    public void Screenshake(float magnitude, float duration) => StartCoroutine(cameraMovement.ScreenShake(magnitude,duration));
 }

@@ -112,7 +112,8 @@ public class ThrowableWeapon : MonoBehaviour
         nextPosition = hit.position + new Vector3(0,0.4f,0);
 
         indicator = GameObject.Instantiate(indicatorPrefab);
-        indicator.transform.position = nextPosition;
+        indicator.transform.position = hit.position;
+        Material indicatorMaterial = indicator.GetComponentInChildren<MeshRenderer>().material;
 
         float timeSinceImpact = dropTime;
         while(timeSinceImpact > 0)
@@ -124,6 +125,7 @@ public class ThrowableWeapon : MonoBehaviour
             currentPosition.z = Mathf.Lerp(lastPosition.z, nextPosition.z, horizontalDropCurve.Evaluate(progressionValue));
             currentPosition.y = Mathf.Lerp(nextPosition.y + dropHeight, nextPosition.y, verticalDropCurve.Evaluate(progressionValue));
 
+            indicatorMaterial.SetFloat("progress", progressionValue);
             transform.position = currentPosition;
             timeSinceImpact -= Time.deltaTime;
 

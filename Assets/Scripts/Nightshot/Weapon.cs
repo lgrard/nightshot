@@ -43,6 +43,10 @@ public class Weapon : ScriptableObject
     public Object impactEffect;
     public Object bulletTrail;
 
+    [Header("ScreenShake data")]
+    public float screenshakeDuration = 0.1f;
+    public float screenshakeMagnitude = 0.1f;
+
     public bool canFire = true;
 
     public void ReduceUsage()
@@ -55,12 +59,14 @@ public class Weapon : ScriptableObject
         ammo = maxAmmo;
     }
 
-    public IEnumerator Fire(Transform origin)
+    public IEnumerator Fire(Transform origin, GameManager gameManager)
     {
         canFire = false;
         
         for (int i = burstCount; i>0; i--)
         {
+            gameManager.Screenshake(screenshakeMagnitude, screenshakeDuration);
+
             GameObject muzzleFlashObject = (GameObject)Instantiate(muzzleFlash, origin);
             Destroy(muzzleFlashObject, muzzleFlashObject.GetComponent<ParticleSystem>().main.duration);
 

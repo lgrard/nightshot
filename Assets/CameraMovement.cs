@@ -14,6 +14,8 @@ public class CameraMovement : MonoBehaviour
     public float maxZoom = 10f;
     public float zoomLimiter = 50f;
 
+    [SerializeField] AnimationCurve screenshakeCurve;
+
     private Vector3 velocity;
     private Camera cam;
 
@@ -74,5 +76,19 @@ public class CameraMovement : MonoBehaviour
 
     }
 
+
+    public IEnumerator ScreenShake(float magnitude, float duration)
+    {
+        float time = duration;
+        
+        while(time > 0)
+        {
+            cam.transform.localPosition = Random.insideUnitSphere * magnitude* screenshakeCurve.Evaluate(time/duration);
+            time -= Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+
+        cam.transform.localPosition = Vector3.zero;
+    }
 }
  

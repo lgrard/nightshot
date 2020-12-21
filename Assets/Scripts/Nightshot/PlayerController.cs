@@ -7,20 +7,30 @@ using static UnityEngine.InputSystem.InputAction;
 
 public class PlayerController : MonoBehaviour
 {
-    [Header("Values")]
+    public int playerIndex = 0;
+
+    [Header("HP Values")]
     [SerializeField] int maxHP = 10;
     private int HP = 10;
+
+    [Header("Dash Values")]
     [SerializeField] float dashAmount = 20;
     [SerializeField] float maxDashTime = 1;
+    [SerializeField] float dashCooldown = 1;
+
+    [Header("Speed Values")]
     [SerializeField] float runningSpeed = 10;
     [SerializeField] float attackingSpeed = 5;
     [SerializeField] float takingDamageSpeed = 5;
+
+    [Header("Various Values")]
     [SerializeField] float groundCheckDistance = 5;
     [SerializeField] float rotationSmoothingAmount = 0.01f;
     [SerializeField] float attackStampMax = 1f;
     private float currentStamp = 0f;
     [SerializeField] int attackDamage = 1;
     [SerializeField] float attackRadius = 1f;
+    [SerializeField] float meleeCooldown = 0.1f;
     [SerializeField] LayerMask attackLayers;
     [SerializeField] LayerMask dashLayer;
 
@@ -55,6 +65,8 @@ public class PlayerController : MonoBehaviour
     }
 
     private bool isGrounded;
+    private bool canDash = true;
+    private bool canMelee = true;
 
     [Header("Preview zone and points")]
     [Tooltip("Red = Melee box, Green = Throw point, Blue = Fire point")]
@@ -144,6 +156,10 @@ public class PlayerController : MonoBehaviour
                 HandleMovement(takingDamageSpeed);
                 HandleRotation();
                 break;
+
+            case PlayerStates.dashing:
+                HandleRotation();
+                break;
         }
 
         //Stamp fighting setting
@@ -151,14 +167,14 @@ public class PlayerController : MonoBehaviour
             currentStamp -= Time.deltaTime;
 
         else if (currentState != PlayerStates.running)
-            SetCurrentState(PlayerStates.running);
+            SetCurrentState(PlayerStates.running,0);
     }
-    private void SetCurrentState(PlayerStates state)
+    private void SetCurrentState(PlayerStates state, float timeToRecover)
     {
         currentState = state;
-
-        if(state == PlayerStates.attacking || state == PlayerStates.defending)
-            currentStamp = attackStampMax;
+        
+        if(timeToRecover>0)
+            currentStamp = timeToRecover;
     }
 
 
@@ -185,67 +201,74 @@ public class PlayerController : MonoBehaviour
 
     //Input getting
     private void OnMovement(InputValue value) => inputMovement = value.Get<Vector2>();
-    private void OnAiming(InputValue value) => inputRot = value.Get<Vector2>();
+    private void OnAiming(InputValue value)
+    {
+        inputRot = value.Get<Vector2>();
+    }
 
     //Input press
     private void OnDefense()
     {
         Debug.Log("Defense");
-        SetCurrentState(PlayerStates.defending);
+        SetCurrentState(PlayerStates.defending,attackStampMax);
     }
     private void OnFire()
     {
         if (currentWeapon != null && currentWeapon.ammo > 0 && currentWeapon.canFire)
         {
-            StartCoroutine(currentWeapon.Fire(firePoint));
-            SetCurrentState(PlayerStates.attacking);
+            StartCoroutine(currentWeapon.Fire(firePoint,gameManager));
+            SetCurrentState(PlayerStates.attacking,attackStampMax);
         }
 
         else if (currentWeapon == null)
             Debug.Log("No weapon equiped");
 
-        else if (currentWeapon.ammo > 0)
+        else if (currentWeapon.ammo > 0 && currentWeapon.canFire)
             Debug.Log("No ammo");
     }
     private void OnDash()
     {
-        Debug.Log("Dash");
-        SetCurrentState(PlayerStates.dashing);
-
-        Vector3 moveDirection = new Vector3(inputMovement.x, 0, inputMovement.y).normalized * dashAmount;
-        if (moveDirection == Vector3.zero)
-            moveDirection = mesh.transform.forward*dashAmount;
-        
-        Vector3 lastPosition = transform.position;
-        Vector3 nextPosition = transform.position + moveDirection;
-
-        RaycastHit hit;
-
-        if (Physics.Raycast(transform.position, moveDirection, out hit) && Vector3.Distance(hit.point, transform.position) < dashAmount)
+        if (canDash)
         {
-            Debug.Log("Something in front");
-        }
+            Debug.Log("Dash");
+            SetCurrentState(PlayerStates.dashing, maxDashTime);
 
-        else
+            Vector3 moveDirection = new Vector3(inputMovement.x, 0, inputMovement.y).normalized * dashAmount;
+            if (moveDirection == Vector3.zero)
+                moveDirection = mesh.transform.forward*dashAmount;
+        
+            Vector3 lastPosition = transform.position;
+            Vector3 nextPosition;
+
+            RaycastHit hit;
+
+            if (Physics.Raycast(transform.position, moveDirection, out hit) && Vector3.Distance(hit.point, transform.position) < dashAmount)
+                nextPosition = hit.point - (mesh.transform.forward * 0.5f);
+
+            else
+                nextPosition = transform.position + moveDirection;
+
             StartCoroutine(Dash(lastPosition, nextPosition));
+        }
     }
     private void OnMelee()
     {
-        SetCurrentState(PlayerStates.attacking);
+        SetCurrentState(PlayerStates.attacking,attackStampMax);
 
         if (currentWeapon != null)
             DropWeapon(true);
 
-        else
+        else if(canMelee)
         {
             Debug.Log("Melee");
-            MeleeAttack();
+            StartCoroutine(MeleeAttack());
         }
     }
 
 
     private IEnumerator Dash(Vector3 destination, Vector3 origin)
     {
+        canDash = false;
         float dashTime = maxDashTime;
         
         while (dashTime > 0)
@@ -255,9 +278,14 @@ public class PlayerController : MonoBehaviour
             dashTime -= Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
+
+        yield return new WaitForSeconds(dashCooldown);
+        canDash = true;
     }
-    private void MeleeAttack()
+    private IEnumerator MeleeAttack()
     {
+        canMelee = false;
+
         Collider[] targetHits;
         targetHits = Physics.OverlapSphere(meleePoint.position, attackRadius, attackLayers);
 
@@ -270,6 +298,10 @@ public class PlayerController : MonoBehaviour
                 playerController.TakeDamage(attackDamage);
             }
         }
+
+        yield return new WaitForSeconds(meleeCooldown);
+
+        canMelee = true;
     }
     public void TakeDamage(int damageToTake)
     {
@@ -284,6 +316,9 @@ public class PlayerController : MonoBehaviour
             gameManager.RemovePlayer(transform);
             Destroy(gameObject);
         }
+
+        else
+            SetCurrentState(PlayerStates.takingDamage, attackStampMax);
     }
     private void DropWeapon(bool isThrown)
     {

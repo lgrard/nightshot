@@ -111,7 +111,7 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
+  m_DynamicOccludee: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -330,9 +330,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2afcd0315b4a97446bd97f4f88b339eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerIndex: 0
   maxHP: 10
   dashAmount: 3
-  maxDashTime: 0.05
+  maxDashTime: 0.1
+  dashCooldown: 1
   runningSpeed: 7
   attackingSpeed: 5
   takingDamageSpeed: 5
@@ -341,6 +343,7 @@ MonoBehaviour:
   attackStampMax: 0.5
   attackDamage: 1
   attackRadius: 1
+  meleeCooldown: 0.1
   attackLayers:
     serializedVersion: 2
     m_Bits: 256
@@ -411,7 +414,7 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
+  m_DynamicOccludee: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -493,7 +496,7 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
+  m_DynamicOccludee: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1

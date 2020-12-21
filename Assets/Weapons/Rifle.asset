@@ -19,7 +19,7 @@ MonoBehaviour:
   maxAmmo: 30
   ammo: 5
   numberOfUsageMax: 10
-  numberOfUsage: 3
+  numberOfUsage: 10
   fireRate: 0.1
   burstSpacing: 0.05
   dispertion: 0.1
@@ -35,4 +35,6 @@ MonoBehaviour:
   muzzleFlash: {fileID: 4268830454406357431, guid: 808b1a54848f3894e9b2cf3af42778a8, type: 3}
   impactEffect: {fileID: 4268830454406357431, guid: 808b1a54848f3894e9b2cf3af42778a8, type: 3}
   bulletTrail: {fileID: 7063830456377782545, guid: 3de709c740f3ca04cb2c50d755579a0b, type: 3}
+  screenshakeDuration: 0.1
+  screenshakeMagnitude: 0.06
   canFire: 1
