@@ -40,6 +40,13 @@ public class WeaponEditor : Editor
         weapon.firePointOffset = EditorGUILayout.Vector3Field("Fire point position offset", weapon.firePointOffset);
         EditorGUILayout.Space();
 
+        GUILayout.Label("Weapon hand's position", EditorStyles.boldLabel);
+        weapon.rightHandlePositionOffset = EditorGUILayout.Vector3Field("Right position", weapon.rightHandlePositionOffset);
+        weapon.leftHandlePositionOffset = EditorGUILayout.Vector3Field("Left position", weapon.leftHandlePositionOffset);
+        weapon.rightHandleRotationOffset = EditorGUILayout.Vector3Field("Right rotation", weapon.rightHandleRotationOffset);
+        weapon.lefttHandleRotationOffset = EditorGUILayout.Vector3Field("Left rotation", weapon.lefttHandleRotationOffset);
+        EditorGUILayout.Space();
+
         GUILayout.Label("ScreenShake", EditorStyles.boldLabel);
         weapon.screenshakeDuration = EditorGUILayout.FloatField("Screenshake duration", weapon.screenshakeDuration);
         weapon.screenshakeMagnitude = EditorGUILayout.FloatField("Screenshake magnitude", weapon.screenshakeMagnitude);

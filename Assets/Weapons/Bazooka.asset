@@ -35,6 +35,10 @@ MonoBehaviour:
   muzzleFlash: {fileID: 4268830454406357431, guid: 808b1a54848f3894e9b2cf3af42778a8, type: 3}
   impactEffect: {fileID: 4268830454406357431, guid: 808b1a54848f3894e9b2cf3af42778a8, type: 3}
   bulletTrail: {fileID: 0}
+  rightHandlePositionOffset: {x: 0, y: 0, z: -0.028}
+  rightHandleRotationOffset: {x: 0, y: 0, z: 0}
+  leftHandlePositionOffset: {x: 0, y: 0, z: 0.364}
+  lefttHandleRotationOffset: {x: 0, y: 0, z: 0}
   screenshakeDuration: 0.2
   screenshakeMagnitude: 0.1
   canFire: 1

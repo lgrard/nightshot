@@ -43,6 +43,12 @@ public class Weapon : ScriptableObject
     public Object impactEffect;
     public Object bulletTrail;
 
+    [Header("WeaponHandle")]
+    public Vector3 rightHandlePositionOffset;
+    public Vector3 rightHandleRotationOffset;
+    public Vector3 leftHandlePositionOffset;
+    public Vector3 lefttHandleRotationOffset;
+
     [Header("ScreenShake data")]
     public float screenshakeDuration = 0.1f;
     public float screenshakeMagnitude = 0.1f;
