@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float runningSpeed = 10;
     [SerializeField] float attackingSpeed = 5;
     [SerializeField] float takingDamageSpeed = 5;
+    [SerializeField] float gravityAmount = 1;
 
     [Header("Various Values")]
     [SerializeField] float groundCheckDistance = 5;
@@ -113,6 +114,11 @@ public class PlayerController : MonoBehaviour
             rb.velocity = new Vector3(DesiredPosition.x * movementSpeed, rb.velocity.y, DesiredPosition.z * movementSpeed);
             animator.SetFloat("XSpeed", inputMovement.x);
             animator.SetFloat("YSpeed", inputMovement.y);
+        }
+
+        else
+        {
+            rb.velocity = new Vector3(DesiredPosition.x * movementSpeed, rb.velocity.y-gravityAmount, DesiredPosition.z * movementSpeed);
         }
     }
     private void HandleRotation()
