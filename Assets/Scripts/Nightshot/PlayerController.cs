@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 using static UnityEngine.InputSystem.InputAction;
+using UnityEngine.Animations.Rigging;
 
 public class PlayerController : MonoBehaviour
 {
@@ -40,7 +41,8 @@ public class PlayerController : MonoBehaviour
 
 
     [Header("Components")]
-    [SerializeField] MeshRenderer mesh;
+    [SerializeField] Transform mesh;
+    [SerializeField] Animator animator;
     public Weapon currentWeapon = null;
     private Rigidbody rb;
 
@@ -51,6 +53,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Transform throwPoint;
     [SerializeField] Transform firePoint;
     [SerializeField] Transform meleePoint;
+    [SerializeField] Transform rightHandle;
+    [SerializeField] Transform leftHandle;
+    [SerializeField] Rig rigConstraint;
 
     [Header("States")]
     [SerializeField] PlayerStates currentState;
@@ -106,6 +111,8 @@ public class PlayerController : MonoBehaviour
         if (isGrounded)
         {
             rb.velocity = new Vector3(DesiredPosition.x * movementSpeed, rb.velocity.y, DesiredPosition.z * movementSpeed);
+            animator.SetFloat("XSpeed", inputMovement.x);
+            animator.SetFloat("YSpeed", inputMovement.y);
         }
     }
     private void HandleRotation()
@@ -129,6 +136,7 @@ public class PlayerController : MonoBehaviour
     {
         Ray groundRay = new Ray(gameObject.transform.position, gameObject.transform.up * -1);
         isGrounded = Physics.Raycast(groundRay,groundCheckDistance);
+        animator.SetBool("Grounded", isGrounded);
     }
 
 
@@ -187,7 +195,12 @@ public class PlayerController : MonoBehaviour
             weaponMesh.GetComponent<MeshFilter>().mesh = weaponToPick.weaponMesh as Mesh;
             weaponMesh.GetComponent<MeshRenderer>().material = weaponToPick.weaponMaterial as Material;
             firePoint.transform.localPosition = currentWeapon.firePointOffset;
+            rightHandle.localPosition = weaponToPick.rightHandlePositionOffset;
+            rightHandle.rotation.SetEulerAngles(weaponToPick.rightHandleRotationOffset);
+            leftHandle.localPosition = weaponToPick.leftHandlePositionOffset;
+            leftHandle.rotation.SetEulerAngles(weaponToPick.lefttHandleRotationOffset);
             currentWeapon.Reload();
+            rigConstraint.weight = 1;
         }
 
         else
@@ -195,6 +208,7 @@ public class PlayerController : MonoBehaviour
             currentWeapon = null;
             weaponMesh.GetComponent<MeshFilter>().mesh = null;
             weaponMesh.GetComponent<MeshRenderer>().material = null;
+            rigConstraint.weight = 0;
         }
     }
 
@@ -286,6 +300,8 @@ public class PlayerController : MonoBehaviour
     {
         canMelee = false;
 
+        animator.SetTrigger("Melee");
+
         Collider[] targetHits;
         targetHits = Physics.OverlapSphere(meleePoint.position, attackRadius, attackLayers);
 
@@ -329,6 +345,9 @@ public class PlayerController : MonoBehaviour
         thrownWeaponComponent.transform.position = throwPoint.position;
         thrownWeaponComponent.transform.rotation = throwPoint.rotation;
         thrownWeaponComponent.isThrown = isThrown;
+        
+        if(isThrown)
+            animator.SetTrigger("Throw");
 
         currentWeapon.ReduceUsage();
 
