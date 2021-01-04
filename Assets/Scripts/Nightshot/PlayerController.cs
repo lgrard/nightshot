@@ -51,6 +51,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameManager gameManager;
     [SerializeField] GameObject weaponMesh;
     [SerializeField] LineRenderer laserSight;
+    [SerializeField] TrailRenderer dashTrail;
     [SerializeField] GameObject throwableWeaponPrefab;
     [SerializeField] Transform throwPoint;
     [SerializeField] Transform firePoint;
@@ -294,7 +295,8 @@ public class PlayerController : MonoBehaviour
     {
         canDash = false;
         float dashTime = maxDashTime;
-        
+        dashTrail.emitting = true;
+
         while (dashTime > 0)
         {
             float dashProgress = dashTime / maxDashTime;
@@ -302,6 +304,8 @@ public class PlayerController : MonoBehaviour
             dashTime -= Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
+        
+        dashTrail.emitting = false;
 
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
