@@ -36,7 +36,8 @@ public class WeaponEditor : Editor
         weapon.weaponMesh = EditorGUILayout.ObjectField("Weapon mesh",weapon.weaponMesh, typeof(Mesh), false);
         weapon.weaponMaterial = EditorGUILayout.ObjectField("Weapon material", weapon.weaponMaterial, typeof(Material), false);
         weapon.muzzleFlash = EditorGUILayout.ObjectField("Muzzle flash", weapon.muzzleFlash, typeof(GameObject), false);
-        weapon.impactEffect = EditorGUILayout.ObjectField("Impact effect", weapon.impactEffect, typeof(GameObject), false);
+        weapon.impactEffectBlood = EditorGUILayout.ObjectField("Impact effect blood", weapon.impactEffectBlood, typeof(GameObject), false);
+        weapon.impactEffectOther = EditorGUILayout.ObjectField("Impact effect other", weapon.impactEffectOther, typeof(GameObject), false);
         weapon.firePointOffset = EditorGUILayout.Vector3Field("Fire point position offset", weapon.firePointOffset);
         EditorGUILayout.Space();
 

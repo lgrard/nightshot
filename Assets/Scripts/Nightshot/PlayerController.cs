@@ -50,6 +50,7 @@ public class PlayerController : MonoBehaviour
     [Header("Object reference")]
     [SerializeField] GameManager gameManager;
     [SerializeField] GameObject weaponMesh;
+    [SerializeField] LineRenderer laserSight;
     [SerializeField] GameObject throwableWeaponPrefab;
     [SerializeField] Transform throwPoint;
     [SerializeField] Transform firePoint;
@@ -198,9 +199,11 @@ public class PlayerController : MonoBehaviour
         if(weaponToPick != null)
         {
             currentWeapon = weaponToPick;
+            laserSight.enabled = true;
             weaponMesh.GetComponent<MeshFilter>().mesh = weaponToPick.weaponMesh as Mesh;
             weaponMesh.GetComponent<MeshRenderer>().material = weaponToPick.weaponMaterial as Material;
             firePoint.transform.localPosition = currentWeapon.firePointOffset;
+            laserSight.gameObject.transform.localPosition = currentWeapon.firePointOffset;
             rightHandle.localPosition = weaponToPick.rightHandlePositionOffset;
             rightHandle.rotation.SetEulerAngles(weaponToPick.rightHandleRotationOffset);
             leftHandle.localPosition = weaponToPick.leftHandlePositionOffset;
@@ -212,6 +215,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             currentWeapon = null;
+            laserSight.enabled = false;
             weaponMesh.GetComponent<MeshFilter>().mesh = null;
             weaponMesh.GetComponent<MeshRenderer>().material = null;
             rigConstraint.weight = 0;
@@ -318,6 +322,7 @@ public class PlayerController : MonoBehaviour
             {
                 Debug.Log(playerController.gameObject.name + " hit");
                 playerController.TakeDamage(attackDamage);
+                StartCoroutine(HitStop(0.2f,0.2f));
             }
         }
 
@@ -328,6 +333,8 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(int damageToTake)
     {
         HP -= damageToTake;
+        animator.SetTrigger("GetHit");
+        StartCoroutine(HitStop(0.5f, 0.2f));
 
         if (HP <= 0)
         {
@@ -358,6 +365,14 @@ public class PlayerController : MonoBehaviour
         currentWeapon.ReduceUsage();
 
         ChangeWeapon(null);
+    }
+
+    private IEnumerator HitStop(float duration, float force)
+    {
+        yield return new WaitForSeconds(0.2f);
+        animator.speed = force;
+        yield return new WaitForSeconds(duration);
+        animator.speed = 1;
     }
 
 

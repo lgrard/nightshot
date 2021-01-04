@@ -14,6 +14,7 @@ public class ThrowableWeapon : MonoBehaviour
     GameObject indicator;
 
     [Header("Datas")]
+    [SerializeField] int damage = 1;
     [SerializeField] float throwForce = 100f;
     [SerializeField] float minimumHitForce = 80f;
     [SerializeField] float dropRadius;
@@ -29,11 +30,13 @@ public class ThrowableWeapon : MonoBehaviour
     [Header("Components")]
     bool isPickable = false;
     Rigidbody rb;
+    SphereCollider collider;
 
 
     private void Start()
     {
         rb = gameObject.GetComponent<Rigidbody>();
+        collider = gameObject.GetComponent<SphereCollider>();
         mesh.GetComponent<MeshFilter>().mesh = thrownWeapon.weaponMesh as Mesh;
         mesh.GetComponent<MeshRenderer>().material = thrownWeapon.weaponMaterial as Material;
 
@@ -61,7 +64,10 @@ public class ThrowableWeapon : MonoBehaviour
                 }
 
                 else if (rb.velocity.magnitude >= minimumHitForce)
+                {
+                    playerController.TakeDamage(damage);
                     StartCoroutine(Bounce());
+                }
             }
 
             else
@@ -102,6 +108,7 @@ public class ThrowableWeapon : MonoBehaviour
     IEnumerator Bounce()
     {
         rb.isKinematic = true;
+        collider.enabled = false;
 
         Vector3 lastPosition = transform.position;
         Vector3 nextPosition = (Random.insideUnitCircle.normalized* dropRadius);
@@ -130,7 +137,10 @@ public class ThrowableWeapon : MonoBehaviour
             timeSinceImpact -= Time.deltaTime;
 
             if(progressionValue >= 0.5)
+            {
                 isPickable = true;
+                collider.enabled = true;
+            }
 
             mesh.transform.Rotate(Vector3.one* meshRotationSpeed);
             indicator.transform.position = nextPosition;

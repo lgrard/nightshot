@@ -40,7 +40,9 @@ public class Weapon : ScriptableObject
     public Object weaponMaterial;
     public Object projectilePrefab;
     public Object muzzleFlash;
-    public Object impactEffect;
+    public Object impactEffectBlood;
+    public Object impactEffectOther;
+    public GameObject impactEffectObject = null;
     public Object bulletTrail;
 
     [Header("WeaponHandle")]
@@ -103,13 +105,17 @@ public class Weapon : ScriptableObject
                         {
                             Debug.Log(playerController.gameObject.name + " hit");
                             playerController.TakeDamage(attackDamage);
+                            impactEffectObject = (GameObject)Instantiate(impactEffectBlood);
                         }
 
-                        GameObject impactEffectObject = (GameObject)Instantiate(impactEffect);
+                        else
+                            impactEffectObject = (GameObject)Instantiate(impactEffectOther);
+
                         Destroy(impactEffectObject, impactEffectObject.GetComponent<ParticleSystem>().main.duration);
                         
                         trailObject.transform.position = hit.point;
                         impactEffectObject.transform.position = hit.point;
+                        impactEffectObject.transform.rotation = origin.transform.rotation;
                     }
 
                     else

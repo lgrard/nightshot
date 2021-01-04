@@ -18,7 +18,7 @@ public class Projectile : MonoBehaviour
     {
         damage = weapon.attackDamage;
         speed = weapon.projectileSpeed;
-        impactEffect = weapon.impactEffect as GameObject;
+        impactEffect = weapon.impactEffectObject as GameObject;
         constantSpeed = weapon.constantSpeed;
 
         rb = gameObject.GetComponent<Rigidbody>();

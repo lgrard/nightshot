@@ -33,7 +33,9 @@ MonoBehaviour:
   weaponMaterial: {fileID: 2100000, guid: 225e7340f239c124c9bfac44ef8dbda2, type: 2}
   projectilePrefab: {fileID: 7357816653570899767, guid: 746cf10235572454083c5e6a7a5db724, type: 3}
   muzzleFlash: {fileID: 4268830454406357431, guid: 808b1a54848f3894e9b2cf3af42778a8, type: 3}
-  impactEffect: {fileID: 4268830454406357431, guid: 808b1a54848f3894e9b2cf3af42778a8, type: 3}
+  impactEffectBlood: {fileID: 4268830454406357431, guid: f04d2cb47c201b142b07baa3a6f731be, type: 3}
+  impactEffectOther: {fileID: 4268830454406357431, guid: af4874ab83bf4e34b90cc5f016528cd5, type: 3}
+  impactEffectObject: {fileID: 0}
   bulletTrail: {fileID: 0}
   rightHandlePositionOffset: {x: 0, y: 0, z: -0.028}
   rightHandleRotationOffset: {x: 0, y: 0, z: 0}
