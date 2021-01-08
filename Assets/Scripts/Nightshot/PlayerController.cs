@@ -35,6 +35,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float meleeCooldown = 0.1f;
     [SerializeField] LayerMask attackLayers;
     [SerializeField] LayerMask dashLayer;
+    [SerializeField] LayerMask groundCheckLayers;
 
     private Vector2 inputMovement;
     private Vector2 inputRot;
@@ -116,6 +117,7 @@ public class PlayerController : MonoBehaviour
             rb.velocity = new Vector3(DesiredPosition.x * movementSpeed, rb.velocity.y, DesiredPosition.z * movementSpeed);
             animator.SetFloat("XSpeed", inputMovement.x);
             animator.SetFloat("YSpeed", inputMovement.y);
+            animator.SetFloat("Speed", rb.velocity.magnitude/runningSpeed);
         }
 
         else
@@ -142,8 +144,8 @@ public class PlayerController : MonoBehaviour
     }
     private void GroundCheck()
     {
-        Ray groundRay = new Ray(gameObject.transform.position, gameObject.transform.up * -1);
-        isGrounded = Physics.Raycast(groundRay,groundCheckDistance);
+        Ray groundRay = new Ray(gameObject.transform.position + gameObject.transform.up*0.1f, gameObject.transform.up * -1);
+        isGrounded = Physics.Raycast(groundRay,groundCheckDistance,groundCheckLayers);
         animator.SetBool("Grounded", isGrounded);
     }
 
@@ -206,9 +208,9 @@ public class PlayerController : MonoBehaviour
             firePoint.transform.localPosition = currentWeapon.firePointOffset;
             laserSight.gameObject.transform.localPosition = currentWeapon.firePointOffset;
             rightHandle.localPosition = weaponToPick.rightHandlePositionOffset;
-            rightHandle.rotation.SetEulerAngles(weaponToPick.rightHandleRotationOffset);
+            rightHandle.localEulerAngles = weaponToPick.rightHandleRotationOffset;
             leftHandle.localPosition = weaponToPick.leftHandlePositionOffset;
-            leftHandle.rotation.SetEulerAngles(weaponToPick.lefttHandleRotationOffset);
+            leftHandle.localEulerAngles = weaponToPick.lefttHandleRotationOffset;
             currentWeapon.Reload();
             rigConstraint.weight = 1;
         }
@@ -398,6 +400,8 @@ public class PlayerController : MonoBehaviour
 
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(meleePoint.position, attackRadius); //Player fire point
+
+            Gizmos.DrawLine(gameObject.transform.position + gameObject.transform.up * 0.1f, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y - groundCheckDistance, gameObject.transform.position.z));
         }
     }
 }

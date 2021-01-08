@@ -37,10 +37,10 @@ MonoBehaviour:
   impactEffectOther: {fileID: 4268830454406357431, guid: af4874ab83bf4e34b90cc5f016528cd5, type: 3}
   impactEffectObject: {fileID: 0}
   bulletTrail: {fileID: 7063830456377782545, guid: 3de709c740f3ca04cb2c50d755579a0b, type: 3}
-  rightHandlePositionOffset: {x: 0.013, y: 0, z: -0.063}
-  rightHandleRotationOffset: {x: 0, y: 0, z: 0}
-  leftHandlePositionOffset: {x: 0, y: 0, z: 0.364}
-  lefttHandleRotationOffset: {x: 0, y: 0, z: -90}
+  rightHandlePositionOffset: {x: 0.009, y: 0.071, z: -0.102}
+  rightHandleRotationOffset: {x: 31.24, y: -253.421, z: -265.564}
+  leftHandlePositionOffset: {x: -0.103, y: 0.074, z: 0.181}
+  lefttHandleRotationOffset: {x: 93.42, y: -81.2, z: -164.4}
   screenshakeDuration: 0.1
   screenshakeMagnitude: 0.06
   canFire: 1
