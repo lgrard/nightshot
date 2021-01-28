@@ -115,8 +115,8 @@ public class PlayerController : MonoBehaviour
         if (isGrounded)
         {
             rb.velocity = new Vector3(DesiredPosition.x * movementSpeed, rb.velocity.y, DesiredPosition.z * movementSpeed);
-            animator.SetFloat("XSpeed", inputMovement.x);
-            animator.SetFloat("YSpeed", inputMovement.y);
+            animator.SetFloat("XSpeed", (transform.InverseTransformDirection(rb.velocity).x)/runningSpeed);
+            animator.SetFloat("ZSpeed", (transform.InverseTransformDirection(rb.velocity).z)/ runningSpeed);
             animator.SetFloat("Speed", rb.velocity.magnitude/runningSpeed);
         }
 
@@ -139,7 +139,7 @@ public class PlayerController : MonoBehaviour
                 DesiredRotation = camForward * inputMovement.y + camRight * inputMovement.x;
 
             Quaternion desiredRotation = Quaternion.LookRotation(new Vector3(DesiredRotation.x, 0, DesiredRotation.z));
-            mesh.transform.rotation = Quaternion.Slerp(desiredRotation, mesh.transform.rotation, rotationSmoothingAmount);
+            transform.rotation = Quaternion.Slerp(desiredRotation, mesh.transform.rotation, rotationSmoothingAmount);
         }
     }
     private void GroundCheck()

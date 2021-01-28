@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: 681997997c04ad649b69d1da24f5d585
+guid: b18b41618be62c545a04a17124205287
 ModelImporter:
   serializedVersion: 20101
   internalIDToNameTable:
   - first:
       74: -623603649343465320
-    second: Anim_Char_RunForward
+    second: Anim_Char_RunRight
   externalObjects: {}
   materials:
     materialImportMode: 1
@@ -35,7 +35,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Anim_Char_RunForward
+      name: Anim_Char_RunRight
       takeName: Scene
       internalID: 0
       firstFrame: 1
@@ -73,8 +73,8 @@ ModelImporter:
     sortHierarchyByName: 1
     importVisibility: 1
     importBlendShapes: 1
-    importCameras: 0
-    importLights: 0
+    importCameras: 1
+    importLights: 1
     fileIdsGeneration: 2
     swapUVChannels: 0
     generateSecondaryUV: 0
